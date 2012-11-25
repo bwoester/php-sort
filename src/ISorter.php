@@ -19,6 +19,11 @@
  * |||| |||  compare mode string automatically.
  * LLLL LLL Currently not used.
  * 
+ * @TODO: keep in mind locale comparison won't always work. Maybe implement a
+ *        workaround?
+ *        See: "http://sgehrig.wordpress.com/2008/09/24/on-how-to-sort-an-array-of-utf-8-strings/"
+ *        Also see: "http://stackoverflow.com/a/6088651/386711"
+ *        Also see: "http://de3.php.net/manual/en/collator.sort.php"
  */
 interface ISorter
 {
