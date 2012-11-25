@@ -4,7 +4,7 @@ class CSortHelper
 {
     /**
      * @see "http://www.codecodex.com/wiki/Merge_sort#PHP"
-     */    
+     */
     public static function mergeSort( &$a )
     {
         if (count($a) <= 1) {
@@ -13,8 +13,8 @@ class CSortHelper
         
     	$b = array_splice( $a, count($a) / 2 );
         
-    	self::sort( $a );
-    	self::sort( $b );
+    	self::mergeSort( $a );
+    	self::mergeSort( $b );
     	
         $o = array();
         

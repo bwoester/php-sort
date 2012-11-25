@@ -1,20 +1,20 @@
 <?php
 
-class CMergeSortTest extends PHPUnit_Framework_TestCase
+class CSortHelperTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @dataProvider provider
+     * @dataProvider mergeSortTestData
      */    
-    public function testSort( $a, $expected )
+    public function testMergeSort( $a, $expected )
     {
-        require_once dirname(__FILE__).'/../src/CMergeSort.php';
-        CMergeSort::sort( $a );
+        require_once dirname(__FILE__).'/../src/CSortHelper.php';
+        CSortHelper::mergeSort( $a );
         $this->assertEquals( $a, $expected );
         $this->assertEquals( array_keys($a), array_keys($expected) );
         $this->assertEquals( array_values($a), array_values($expected) );
     }
     
-    public function provider()
+    public function mergeSortTestData()
     {
         $testData = array();
         
