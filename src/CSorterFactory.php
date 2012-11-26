@@ -7,28 +7,43 @@ class CSorterFactory
     
     /**
      * Creates an ISorter, implementing the requested characteristics
-     * @param $spec integer
+     * @param $spec integer constructed by using ISort constants
      * @return ISorter
      * @throws UnknownSorterException
+     * @code
+     * $sorter = CSorterFactory::create( ISorter::COMPARE_CASE_INSENSITIVE | ISorter::ORDER_DESC );
+     * @endcode
      */
-    public static function create( $spec=0 )
+    public static function create( $spec=0, $comparisonCallback=null )
     {
         $self       = self::getInstance();
         $factory    = $self->getFactoryMethod( $spec );
         
         if (is_callable($factory)) {
-            return call_user_func( $factory ); // TODO: pass user defined callback in case it is a usort variant
+            return is_callable($comparisonCallback)
+                ? call_user_func_array( $factory, array($comparisonCallback) )
+                : call_user_func( $factory );
         }
         
-        throw new UnknownSorterException( $spec );
+        require_once dirname(__FILE__).'/CUnknownSorterException.php'; 
+        throw new CUnknownSorterException( $spec );
     }
 
     /**
      * Allows to register custom sorters.
+     * 
+     * @param $spec integer used to identify the sorter
+     * @param $factoryMethod callable to be called when the registered sorter
+     *        is requested. The factory method will be called without
+     *        parameters if the sorter is not using custom comparison. The
+     *        factory method will be called with one parameter (a callable) if
+     *        sorter is a usort variant (uses a user defined callback to
+     *        compare array items).
      */
     public static function registerSorter( $spec, $factoryMethod )
     {
         $self = self::getInstance();
+        // cast spec to string, to avoid allocation a big array
         $self->_sorterFactoryMethods[ (string)$spec ] = $factoryMethod;
     }
 
@@ -55,55 +70,68 @@ class CSorterFactory
         $this->registerSorter( ISorter::USE_USORT , array($this,'createUSortWrapper')  );
     }
 
-    private function createASortWrapper() {
+    private function createASortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'asort' );
     }
     
-    private function createARSortWrapper() {
+    private function createARSortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'arsort' );
     }
     
-    private function createKRSortWrapper() {
+    private function createKRSortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'krsort' );
     }
     
-    private function createKSortWrapper() {
+    private function createKSortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'ksort' );
     }
     
-    private function createRSortWrapper() {
+    private function createRSortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'rsort' );
     }
     
-    private function createSortWrapper() {
+    private function createSortWrapper()
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
         return new CSortWrapper( 'sort' );
     }
     
-    // TODO: requires callback
-    private function createUASortWrapper() {
+    private function createUASortWrapper( $comparisonCallback )
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'uasort' );
+        $sorter = new CSortWrapper( 'uasort' );
+        $sorter->comparisonCallback = $comparisonCallback;
+        return $sorter;
     }
     
-    // TODO: requires callback
-    private function createUKSortWrapper() {
+    private function createUKSortWrapper( $comparisonCallback )
+    {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'uksort' );
+        $sorter = new CSortWrapper( 'uksort' );
+        $sorter->comparisonCallback = $comparisonCallback;
+        return $sorter;
     }
     
-    // TODO: requires callback
-    private function createUSortWrapper() {
-         require_once dirname(__FILE__).'/CSortWrapper.php';
-       return new CSortWrapper( 'usort' );
+    private function createUSortWrapper( $comparisonCallback )
+    {
+        require_once dirname(__FILE__).'/CSortWrapper.php';
+        $sorter = new CSortWrapper( 'usort' );
+        $sorter->comparisonCallback = $comparisonCallback;
+        return $sorter;
     }
     
-    private function getFactoryMethod( $spec ) {
+    private function getFactoryMethod( $spec )
+    {
         return $this->_sorterFactoryMethods[ (string)$spec ];
     }
 }
