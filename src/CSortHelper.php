@@ -35,4 +35,9 @@ class CSortHelper
         
     	$a = $o;
     }
+    
+    public static function compareRegular( $a, $b ) {
+        return $a < $b;
+    }
+    
 }

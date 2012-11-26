@@ -22,7 +22,7 @@ class CSorterFactory
         if (is_callable($factory)) {
             return is_callable($comparisonCallback)
                 ? call_user_func_array( $factory, array($comparisonCallback) )
-                : call_user_func( $factory );
+                : call_user_func_array( $factory, array() );
         }
         
         require_once dirname(__FILE__).'/CUnknownSorterException.php'; 
@@ -59,15 +59,17 @@ class CSorterFactory
     
     private function init()
     {
-        $this->registerSorter( ISorter::USE_ASORT , array($this,'createASortWrapper')  );
-        $this->registerSorter( ISorter::USE_ARSORT, array($this,'createARSortWrapper') );
-        $this->registerSorter( ISorter::USE_KRSORT, array($this,'createKRSortWrapper') );
-        $this->registerSorter( ISorter::USE_KSORT , array($this,'createKSortWrapper')  );
-        $this->registerSorter( ISorter::USE_RSORT , array($this,'createRSortWrapper')  );
-        $this->registerSorter( ISorter::USE_SORT  , array($this,'createSortWrapper')   );
-        $this->registerSorter( ISorter::USE_UASORT, array($this,'createUASortWrapper') );
-        $this->registerSorter( ISorter::USE_UKSORT, array($this,'createUKSortWrapper') );
-        $this->registerSorter( ISorter::USE_USORT , array($this,'createUSortWrapper')  );
+        $this->registerSorter( ISorter::USE_ASORT       , array($this,'createASortWrapper')         );
+        $this->registerSorter( ISorter::USE_ARSORT      , array($this,'createARSortWrapper')        );
+        $this->registerSorter( ISorter::USE_KRSORT      , array($this,'createKRSortWrapper')        );
+        $this->registerSorter( ISorter::USE_KSORT       , array($this,'createKSortWrapper')         );
+        $this->registerSorter( ISorter::USE_NATCASESORT , array($this,'createNatCaseSortWrapper')   );
+        $this->registerSorter( ISorter::USE_NATSORT     , array($this,'createNatSortWrapper')       );
+        $this->registerSorter( ISorter::USE_RSORT       , array($this,'createRSortWrapper')         );
+        $this->registerSorter( ISorter::USE_SORT        , array($this,'createSortWrapper')          );
+        $this->registerSorter( ISorter::USE_UASORT      , array($this,'createUASortWrapper')        );
+        $this->registerSorter( ISorter::USE_UKSORT      , array($this,'createUKSortWrapper')        );
+        $this->registerSorter( ISorter::USE_USORT       , array($this,'createUSortWrapper')         );
     }
 
     private function createASortWrapper()
@@ -106,6 +108,24 @@ class CSorterFactory
         return $sorter;
     }
     
+    private function createNatCaseSortWrapper()
+    {
+        require_once dirname(__FILE__).'/CSortWrapper.php';
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'natcasesort';
+        $sorter->sortFlags = null;
+        return $sorter;
+    }
+    
+    private function createNatSortWrapper()
+    {
+        require_once dirname(__FILE__).'/CSortWrapper.php';
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'natsort';
+        $sorter->sortFlags = null;
+        return $sorter;
+    }
+    
     private function createRSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
@@ -129,7 +149,7 @@ class CSorterFactory
         require_once dirname(__FILE__).'/CSortWrapper.php';
         $sorter = new CSortWrapper();
         $sorter->sortFunctionName = 'uasort';
-        $sorter->sortFlags = SORT_REGULAR;
+        $sorter->sortFlags = null;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
@@ -139,7 +159,7 @@ class CSorterFactory
         require_once dirname(__FILE__).'/CSortWrapper.php';
         $sorter = new CSortWrapper();
         $sorter->sortFunctionName = 'uksort';
-        $sorter->sortFlags = SORT_REGULAR;
+        $sorter->sortFlags = null;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
@@ -149,7 +169,7 @@ class CSorterFactory
         require_once dirname(__FILE__).'/CSortWrapper.php';
         $sorter = new CSortWrapper();
         $sorter->sortFunctionName = 'usort';
-        $sorter->sortFlags = SORT_REGULAR;
+        $sorter->sortFlags = null;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
