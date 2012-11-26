@@ -73,43 +73,63 @@ class CSorterFactory
     private function createASortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'asort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'asort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createARSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'arsort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'arsort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createKRSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'krsort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'krsort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createKSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'ksort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'ksort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createRSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'rsort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'rsort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createSortWrapper()
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        return new CSortWrapper( 'sort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'sort';
+        $sorter->sortFlags = SORT_REGULAR;
+        return $sorter;
     }
     
     private function createUASortWrapper( $comparisonCallback )
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        $sorter = new CSortWrapper( 'uasort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'uasort';
+        $sorter->sortFlags = SORT_REGULAR;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
@@ -117,7 +137,9 @@ class CSorterFactory
     private function createUKSortWrapper( $comparisonCallback )
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        $sorter = new CSortWrapper( 'uksort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'uksort';
+        $sorter->sortFlags = SORT_REGULAR;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
@@ -125,7 +147,9 @@ class CSorterFactory
     private function createUSortWrapper( $comparisonCallback )
     {
         require_once dirname(__FILE__).'/CSortWrapper.php';
-        $sorter = new CSortWrapper( 'usort' );
+        $sorter = new CSortWrapper();
+        $sorter->sortFunctionName = 'usort';
+        $sorter->sortFlags = SORT_REGULAR;
         $sorter->comparisonCallback = $comparisonCallback;
         return $sorter;
     }
