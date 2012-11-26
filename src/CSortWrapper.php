@@ -10,11 +10,21 @@ class CSortWrapper implements ISorter
     
     public function sort( &$a )
     {
-        call_user_func_array(
-            $this->sortFunctionName,
-            is_callable( $this->comparisonCallback )
-                ? array( &$a, $this->comparisonCallback )
-                : array( &$a )
-        );
+        if (is_callable($this->comparisonCallback))
+        {
+            call_user_func_array(
+                $this->sortFunctionName,
+                array( &$a, $this->comparisonCallback )
+            );
+        }
+        else
+        {
+            call_user_func_array(
+                $this->sortFunctionName,
+                $this->sortFlags === null
+                    ? array( &$a )
+                    : array( &$a, $this->sortFlags )
+            );
+        }
     }
 }
